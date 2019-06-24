@@ -11,9 +11,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class ReactionManager {
     handleMessage(msg) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (msg.author.tag.includes('Катюша')) {
-                msg.reply('Хатьфу');
-            }
+            // if (msg.author.tag.includes('Катюша')) {
+            //   msg.reply('Хатьфу');
+            // }
         });
     }
 }
