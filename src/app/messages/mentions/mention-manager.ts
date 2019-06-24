@@ -30,6 +30,16 @@ const mentionedList: {[key: string] : MentionSubject} = {
 
 export class MentionManager implements MessageListener {
   async handleMessage(msg: Message): Promise<any> {
+    if (msg.content.includes('нет')) {
+      msg.reply('Пидора ответ!');
+      return;
+    }
+
+    if (msg.content.includes('нит')) {
+      msg.reply('Пидора отвит!');
+      return;
+    }
+
     for (let name in mentionedList) {
       if (!msg.content.includes(name)) {
         continue;
