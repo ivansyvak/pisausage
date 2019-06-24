@@ -32,12 +32,12 @@ const mentionedList = {
 class MentionManager {
     handleMessage(msg) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (msg.content.includes('нет')) {
-                msg.reply('Пидора ответ!');
+            if (msg.content.includes('нет') || msg.content.includes('Нет')) {
+                msg.reply('Пидора ответ! хахА');
                 return;
             }
-            if (msg.content.includes('нит')) {
-                msg.reply('Пидора отвит!');
+            if (msg.content.includes('нит') || msg.content.includes('Нит')) {
+                msg.reply('Пидора отвит! хахА');
                 return;
             }
             for (let name in mentionedList) {
