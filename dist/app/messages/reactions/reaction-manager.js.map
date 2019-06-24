@@ -1,0 +1,1 @@
+{"version":3,"file":"reaction-manager.js","sourceRoot":"","sources":["../../../../src/app/messages/reactions/reaction-manager.ts"],"names":[],"mappings":";;;;;;;;;;AAGA,MAAa,eAAe;IACpB,aAAa,CAAC,GAAY;;YAC9B,IAAI,GAAG,CAAC,MAAM,CAAC,GAAG,CAAC,QAAQ,CAAC,QAAQ,CAAC,EAAE;gBACrC,GAAG,CAAC,KAAK,CAAC,QAAQ,CAAC,CAAC;aACrB;QACH,CAAC;KAAA;CACF;AAND,0CAMC"}
