@@ -1,4 +1,6 @@
-const token = "NTkyNzI0ODU3NDk0NDM3ODky.XRDm2Q.DzSmykBzj2IkaZUlM2mdvqmweDU";
+import * as fs from 'fs';
+
+const config = JSON.parse(fs.readFileSync('./token.json').toString());
 
 import { Client } from 'discord.js';
 import { Bot } from './app/bot';
@@ -6,4 +8,4 @@ import { Bot } from './app/bot';
 const client = new Client();
 const bot = new Bot(client);
 
-client.login(token);
+client.login(config.token);
