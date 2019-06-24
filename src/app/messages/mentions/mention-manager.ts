@@ -6,6 +6,7 @@ import { dianaMention } from "./mention-diana";
 import { hahaMention } from "./mention-haha";
 import { sashaMention } from "./mention-sasha";
 import { ivanMention } from "./mention-ivan";
+import { katyaMention } from "./mention-katya";
 
 const mentionedList: {[key: string] : MentionSubject} = {
   'Даня': danyaMentions,
@@ -25,7 +26,12 @@ const mentionedList: {[key: string] : MentionSubject} = {
   'саша': sashaMention,
 
   'Ваня': ivanMention,
-  'ваня': ivanMention
+  'ваня': ivanMention,
+
+  'Катя': katyaMention,
+  'катя': katyaMention,
+  'Катюша': katyaMention,
+  'катюша': katyaMention
 };
 
 export class MentionManager implements MessageListener {

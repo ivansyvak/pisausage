@@ -13,6 +13,7 @@ const mention_diana_1 = require("./mention-diana");
 const mention_haha_1 = require("./mention-haha");
 const mention_sasha_1 = require("./mention-sasha");
 const mention_ivan_1 = require("./mention-ivan");
+const mention_katya_1 = require("./mention-katya");
 const mentionedList = {
     'Даня': mention_danya_1.danyaMentions,
     'даня': mention_danya_1.danyaMentions,
@@ -27,7 +28,11 @@ const mentionedList = {
     'Саша': mention_sasha_1.sashaMention,
     'саша': mention_sasha_1.sashaMention,
     'Ваня': mention_ivan_1.ivanMention,
-    'ваня': mention_ivan_1.ivanMention
+    'ваня': mention_ivan_1.ivanMention,
+    'Катя': mention_katya_1.katyaMention,
+    'катя': mention_katya_1.katyaMention,
+    'Катюша': mention_katya_1.katyaMention,
+    'катюша': mention_katya_1.katyaMention
 };
 class MentionManager {
     handleMessage(msg) {
