@@ -12,6 +12,7 @@ export class Bot {
   private mentionManager: MentionManager = new MentionManager();
   private reactionManager: ReactionManager = new ReactionManager();
   private commandManager: CommandManager = new CommandManager();
+  private logChannel: TextChannel;
 
   constructor(private client: Client) {
     client.on('ready', this.onReady.bind(this));
@@ -34,6 +35,11 @@ export class Bot {
         case 'quotes':
             this.quoteslChannel = chanenl as TextChannel;            
           break;        
+
+        case 'bot-log':
+          this.logChannel = chanenl as TextChannel;
+          break;
+
       }     
     });
 
@@ -63,6 +69,15 @@ export class Bot {
 
   private onGuildMemberAdd(member: GuildMember) {
     this.generalChannel.send(`Привет, <@${member.user.id}>! Меня зовут Сосисыч, но пока что я нихуя не умею`);
+  }
+
+  public sendLogMessage(msg: string) {
+    if (!this.logChannel) {
+      console.log('There is no log channgel');
+      return;
+    }
+
+    this.logChannel.sendMessage(msg.toString());
   }
 
 }

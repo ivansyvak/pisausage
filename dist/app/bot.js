@@ -28,6 +28,9 @@ class Bot {
                 case 'quotes':
                     this.quoteslChannel = chanenl;
                     break;
+                case 'bot-log':
+                    this.logChannel = chanenl;
+                    break;
             }
         });
         if (!this.generalChannel) {
@@ -50,6 +53,13 @@ class Bot {
     }
     onGuildMemberAdd(member) {
         this.generalChannel.send(`Привет, <@${member.user.id}>! Меня зовут Сосисыч, но пока что я нихуя не умею`);
+    }
+    sendLogMessage(msg) {
+        if (!this.logChannel) {
+            console.log('There is no log channgel');
+            return;
+        }
+        this.logChannel.sendMessage(msg.toString());
     }
 }
 exports.Bot = Bot;
