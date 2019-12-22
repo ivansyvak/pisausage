@@ -18,3 +18,11 @@ const client = new Client();
 const bot = new Bot(client);
 
 client.login(token);
+
+process.on('uncaughtException', e => {
+  bot.sendLogMessage(`message: ${e.message}. \nstack: ${e.stack}`);
+});
+
+process.on('unhandledRejection', reason => {
+  bot.sendLogMessage(`Unhandled rejection: ${reason}`);
+});
