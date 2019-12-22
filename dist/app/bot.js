@@ -25,9 +25,6 @@ class Bot {
                 case 'основная-нора':
                     this.generalChannel = chanenl;
                     break;
-                // case 'whiskey-room':
-                //     this.generalChannel = chanenl as TextChannel;
-                //     this.generalChannel.send('Лера лера лера лера лера лера лера');
                 case 'quotes':
                     this.quoteslChannel = chanenl;
                     break;

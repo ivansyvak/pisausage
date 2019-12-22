@@ -31,10 +31,6 @@ export class Bot {
             this.generalChannel = chanenl as TextChannel;
           break;
 
-          // case 'whiskey-room':
-          //     this.generalChannel = chanenl as TextChannel;
-          //     this.generalChannel.send('Лера лера лера лера лера лера лера');
-
         case 'quotes':
             this.quoteslChannel = chanenl as TextChannel;            
           break;        
