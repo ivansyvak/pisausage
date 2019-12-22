@@ -45,6 +45,10 @@ class MentionManager {
                 msg.reply('Пидора отвит! хахА');
                 return;
             }
+            if (msg.content.includes('иди нахуй') || msg.content.includes('Иди нахуй')) {
+                msg.reply('Своим помахуй');
+                return;
+            }
             for (let name in mentionedList) {
                 if (!msg.content.includes(name)) {
                     continue;

@@ -4,21 +4,40 @@ const discord_js_1 = require("discord.js");
 const mention_manager_1 = require("./messages/mentions/mention-manager");
 const logger_1 = require("./logger");
 const reaction_manager_1 = require("./messages/reactions/reaction-manager");
+const command_manager_1 = require("./messages/commands/command-manager");
 class Bot {
     constructor(client) {
         this.client = client;
         this.mentionManager = new mention_manager_1.MentionManager();
         this.reactionManager = new reaction_manager_1.ReactionManager();
+        this.commandManager = new command_manager_1.CommandManager();
         client.on('ready', this.onReady.bind(this));
         client.on('message', this.onMessage.bind(this));
         client.on('guildMemberAdd', this.onGuildMemberAdd.bind(this));
     }
     onReady() {
         this.client.channels.forEach(chanenl => {
-            if (chanenl instanceof discord_js_1.TextChannel && chanenl.name == 'general') {
-                this.generalChanel = chanenl;
+            if (!(chanenl instanceof discord_js_1.TextChannel)) {
+                return;
+            }
+            switch (chanenl.name) {
+                case 'general':
+                case 'основная-нора':
+                    this.generalChannel = chanenl;
+                    break;
+                // case 'whiskey-room':
+                //     this.generalChannel = chanenl as TextChannel;
+                //     this.generalChannel.send('Лера лера лера лера лера лера лера');
+                case 'quotes':
+                    this.quoteslChannel = chanenl;
+                    break;
             }
         });
+        if (!this.generalChannel) {
+            console.log('There is no "general" channel');
+            this.client.destroy();
+            return;
+        }
     }
     onMessage(msg) {
         if (msg.author.bot) {
@@ -26,13 +45,14 @@ class Bot {
         }
         let messageListeners = [
             this.mentionManager.handleMessage(msg),
-            this.reactionManager.handleMessage(msg)
+            this.reactionManager.handleMessage(msg),
+            this.commandManager.handleMessage(msg)
         ];
         Promise.all(messageListeners)
             .catch(logger_1.logger.log);
     }
     onGuildMemberAdd(member) {
-        this.generalChanel.send(`Привет, <@${member.user.id}>! Меня зовут Сосисыч, но пока что я нихуя не умею`);
+        this.generalChannel.send(`Привет, <@${member.user.id}>! Меня зовут Сосисыч, но пока что я нихуя не умею`);
     }
 }
 exports.Bot = Bot;

@@ -1,11 +1,20 @@
 import * as fs from 'fs';
 
-const config = JSON.parse(fs.readFileSync('./token.json').toString());
 
 import { Client } from 'discord.js';
 import { Bot } from './app/bot';
 
+let token = '';
+if (process.env.TOKEN) {
+  token = process.env.TOKEN;
+} else {
+  const config = JSON.parse(fs.readFileSync('./token.json').toString());
+  token = config.token;
+}
+
+
+
 const client = new Client();
 const bot = new Bot(client);
 
-client.login(config.token);
+client.login(token);
