@@ -5,8 +5,9 @@
   "main": "./disc/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./dist/main.js",
-    "prod": "nohup node ./dist/main.js nodaemon &"
+    "start": "npm run dev",
+    "dev": "SET NODE_ENV=dev node ./dist/main.js",
+    "prod": "nohup NODE_ENV=prod node ./dist/main.js nodaemon &"
   },
   "author": "",
   "license": "ISC",

@@ -1,10 +1,12 @@
+import { CONFIG } from '../config';
+
 import { Client, Message, GuildMember, TextChannel } from "discord.js";
 import { MentionManager } from "./messages/mentions/mention-manager";
 import { logger } from './logger';
 import { ReactionManager } from "./messages/reactions/reaction-manager";
 import { CommandManager } from "./messages/commands/command-manager";
 
-export class Bot {
+export class AppBot {
 
   private generalChannel: TextChannel;
   private quoteslChannel: TextChannel;
@@ -18,6 +20,10 @@ export class Bot {
     client.on('ready', this.onReady.bind(this));
     client.on('message', this.onMessage.bind(this));
     client.on('guildMemberAdd', this.onGuildMemberAdd.bind(this));
+  }
+
+  public async start(): Promise<string> {
+    return this.client.login(CONFIG.token);
   }
 
   private onReady() {
@@ -48,8 +54,6 @@ export class Bot {
       this.client.destroy();
       return;
     }
-
-
   }
 
   private onMessage(msg: Message) {
@@ -79,5 +83,9 @@ export class Bot {
 
     this.logChannel.sendMessage(msg.toString());
   }
-
 }
+
+console.log(CONFIG.token);
+
+const client = new Client();
+export const appBot = new AppBot(client)
