@@ -40,7 +40,7 @@ export class Bot {
           this.logChannel = chanenl as TextChannel;
           break;
 
-      }     
+      }  
     });
 
     if (!this.generalChannel) {
@@ -68,7 +68,7 @@ export class Bot {
   }
 
   private onGuildMemberAdd(member: GuildMember) {
-    this.generalChannel.send(`Привет, <@${member.user.id}>! Меня зовут Сосисыч, но пока что я нихуя не умею`);
+    this.generalChannel.send(`Привет, <@${member.user.id}>! Меня зовут Писосыч, но пока что я нихуя не умею`);
   }
 
   public sendLogMessage(msg: string) {

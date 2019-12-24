@@ -2,7 +2,7 @@ import * as fs from 'fs';
 
 
 import { Client } from 'discord.js';
-import { Bot } from './app/bot';
+import { Bot } from './app/app-bot';
 
 let token = '';
 if (process.env.TOKEN) {
