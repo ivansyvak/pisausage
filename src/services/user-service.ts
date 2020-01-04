@@ -2,6 +2,7 @@ import { CRUDService } from "./crud-service";
 import { AppError } from "../common/app-error";
 import { botService } from "./bot-service";
 import { UserModel } from "../models/user-model";
+import { phraseService } from "./phrase-service";
 
 let counter = 0;
 
@@ -14,9 +15,10 @@ class UserService extends CRUDService<UserModel> {
       return user;
     }
 
-    user = new UserModel(data.id);
+    user = new UserModel(data.id, data.tmpKey);
 
     this.users[data.id] = user;
+    phraseService.init(user.id);
 
     return await this.readOne(data.id);
   }
@@ -32,7 +34,7 @@ class UserService extends CRUDService<UserModel> {
     return data;
   }
 
-  async readOne(id: string) {
+  async readOne(id: string): Promise<UserModel> {
     let user = this.users[id];
     if (!user) {
       return;
@@ -58,6 +60,16 @@ class UserService extends CRUDService<UserModel> {
 
     delete this.users[id];
   }
+
+  async getUserByTmpKey(key: string) {
+    let users = await this.read();
+    for (let user of users) {
+      if (user.tmpKey == key) {
+        return user;
+      }
+    }
+  }
+
 }
 
 export const userService = new UserService();

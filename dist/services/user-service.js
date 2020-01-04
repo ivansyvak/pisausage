@@ -12,6 +12,7 @@ const crud_service_1 = require("./crud-service");
 const app_error_1 = require("../common/app-error");
 const bot_service_1 = require("./bot-service");
 const user_model_1 = require("../models/user-model");
+const phrase_service_1 = require("./phrase-service");
 let counter = 0;
 class UserService extends crud_service_1.CRUDService {
     constructor() {
@@ -24,8 +25,9 @@ class UserService extends crud_service_1.CRUDService {
             if (user) {
                 return user;
             }
-            user = new user_model_1.UserModel(data.id);
+            user = new user_model_1.UserModel(data.id, data.tmpKey);
             this.users[data.id] = user;
+            phrase_service_1.phraseService.init(user.id);
             return yield this.readOne(data.id);
         });
     }
@@ -63,6 +65,16 @@ class UserService extends crud_service_1.CRUDService {
                 throw new app_error_1.AppError(404, "User not found");
             }
             delete this.users[id];
+        });
+    }
+    getUserByTmpKey(key) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let users = yield this.read();
+            for (let user of users) {
+                if (user.tmpKey == key) {
+                    return user;
+                }
+            }
         });
     }
 }

@@ -2,6 +2,7 @@ import { CONFIG } from '../config';
 
 import { Client, Message, GuildMember, TextChannel, DMChannel, User } from "discord.js";
 import * as uid from 'uniqid';
+import { userService } from './user-service';
 
 interface TmpKey {
   key: string;
@@ -47,7 +48,13 @@ export class BotService {
     }
   }
 
-  private startRegistration(msg: Message) {
+  private async startRegistration(msg: Message) {
+    let user = await userService.readOne(msg.author.id);
+    if (user) {
+      msg.author.send(`You are already logged in with code: ${user.tmpKey}`);
+      return;
+    }
+
     let expiringDate = new Date();
     expiringDate.setHours(expiringDate.getHours() + 24);
 

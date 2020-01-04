@@ -1,8 +1,17 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const config_1 = require("../config");
 const discord_js_1 = require("discord.js");
 const uid = require("uniqid");
+const user_service_1 = require("./user-service");
 class BotService {
     constructor() {
         this.tmpKeys = {};
@@ -31,15 +40,22 @@ class BotService {
         }
     }
     startRegistration(msg) {
-        let expiringDate = new Date();
-        expiringDate.setHours(expiringDate.getHours() + 24);
-        let tmpKey = uid(8);
-        this.tmpKeys[tmpKey] = {
-            expiring: expiringDate,
-            key: tmpKey,
-            payload: msg.author.id
-        };
-        msg.author.send(`Код активации: ${tmpKey}`);
+        return __awaiter(this, void 0, void 0, function* () {
+            let user = yield user_service_1.userService.readOne(msg.author.id);
+            if (user) {
+                msg.author.send(`You are already logged in with code: ${user.tmpKey}`);
+                return;
+            }
+            let expiringDate = new Date();
+            expiringDate.setHours(expiringDate.getHours() + 24);
+            let tmpKey = uid(8);
+            this.tmpKeys[tmpKey] = {
+                expiring: expiringDate,
+                key: tmpKey,
+                payload: msg.author.id
+            };
+            msg.author.send(`Код активации: ${tmpKey}`);
+        });
     }
     onGuildMemberAdd(member) {
         this.generalChannel.send(`Привет, <@${member.user.id}>! Меня зовут Писосыч, но пока что я нихуя не умею`);
@@ -54,6 +70,9 @@ class BotService {
     }
     getTmpKey(tmpKey) {
         return this.tmpKeys[tmpKey];
+    }
+    removeTmpKey(tmpKey) {
+        delete this.tmpKeys[tmpKey];
     }
     sendMessage(id, message) {
         let user = this.client.users.get(id);

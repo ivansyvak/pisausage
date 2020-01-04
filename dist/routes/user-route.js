@@ -49,8 +49,14 @@ exports.userRouter.post('/', (req, res, next) => __awaiter(this, void 0, void 0,
         }
         let obj = {
             id: botUser.id,
+            tmpKey: tmpKey.key
+            // username: botUser.username,
+            // tag: botUser.tag,
+            // avatarURL: botUser.avatarURL,
+            // displayAvatarURL: botUser.displayAvatarURL
         };
         let user = yield user_service_1.userService.create(obj);
+        bot_service_1.botService.removeTmpKey(tmpKey.key);
         res.statusCode = 200;
         res.json(user);
     }
