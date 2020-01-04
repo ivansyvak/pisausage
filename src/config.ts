@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { logger } from './app/logger';
+import { logger } from './common/logger';
 
 interface Config {
   token: string;
