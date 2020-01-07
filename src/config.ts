@@ -5,6 +5,10 @@ interface Config {
   token: string;
 }
 
+if (!process.env.NODE_ENV) {
+  process.env.NODE_ENV = 'dev';
+}
+
 let configFilePath = "";
 switch (process.env.NODE_ENV) {
   case 'dev':

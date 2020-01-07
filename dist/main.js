@@ -9,6 +9,15 @@ const phrase_route_1 = require("./routes/phrase-route");
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+    app.options('*', (req, res) => {
+        res.header('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE, OPTIONS');
+        res.send();
+    });
+});
 app.use('/users', user_route_1.userRouter);
 app.use('/phrases', phrase_route_1.phraseRouter);
 app.use('/', (req, res) => {
@@ -17,7 +26,7 @@ app.use('/', (req, res) => {
 app.use((err, req, res, next) => {
     if (err instanceof app_error_1.AppError) {
         res.status(err.code);
-        res.json(err);
+        res.json(Object.assign({}, err, { error: true }));
     }
     else {
         res.status(500);

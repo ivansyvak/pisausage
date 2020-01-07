@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
+if (!process.env.NODE_ENV) {
+    process.env.NODE_ENV = 'dev';
+}
 let configFilePath = "";
 switch (process.env.NODE_ENV) {
     case 'dev':
