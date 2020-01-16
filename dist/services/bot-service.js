@@ -12,6 +12,7 @@ const config_1 = require("../config");
 const discord_js_1 = require("discord.js");
 const uid = require("uniqid");
 const user_service_1 = require("./user-service");
+const phrase_service_1 = require("./phrase-service");
 class BotService {
     constructor() {
         this.tmpKeys = {};
@@ -28,10 +29,25 @@ class BotService {
     onReady() {
     }
     onMessage(msg) {
-        if (msg.channel instanceof discord_js_1.DMChannel) {
-            this.handleDMC(msg);
-            return;
-        }
+        return __awaiter(this, void 0, void 0, function* () {
+            if (msg.author.bot) {
+                return;
+            }
+            if (msg.channel instanceof discord_js_1.DMChannel) {
+                this.handleDMC(msg);
+                return;
+            }
+            let words = msg.content.split(' ');
+            for (let word of words) {
+                let phrases = yield phrase_service_1.phraseService.read(word);
+                if (!phrases) {
+                    continue;
+                }
+                let phrasesArr = Object.values(phrases);
+                let rand = phrasesArr[Math.floor(Math.random() * phrasesArr.length)];
+                msg.reply(rand.content);
+            }
+        });
     }
     handleDMC(msg) {
         if (msg.content.includes('!login')) {
@@ -47,14 +63,14 @@ class BotService {
                 return;
             }
             let expiringDate = new Date();
-            expiringDate.setHours(expiringDate.getHours() + 24);
+            expiringDate.setHours(expiringDate.getHours() + (24 * 60));
             let tmpKey = uid(8);
             this.tmpKeys[tmpKey] = {
                 expiring: expiringDate,
                 key: tmpKey,
                 payload: msg.author.id
             };
-            msg.author.send(`Код активации: ${tmpKey}`);
+            msg.author.send(`${tmpKey}`);
         });
     }
     onGuildMemberAdd(member) {

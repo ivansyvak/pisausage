@@ -42,9 +42,9 @@ class PhraseService extends CRUDService<Phrases> {
     return res;
   }
 
-  async update(id: string, data: PhraseModel) {
-    if (!this.phrases[id] || !this.phrases[id][data.id]) {
-      throw new AppError(404, `Key ${id} not found in phrases`);
+  async update(data: PhraseModel) {
+    if (!this.phrases[data.key] || !this.phrases[data.key][data.id]) {
+      throw new AppError(404, `Key ${data.key} not found in phrases`);
     }
 
     this.phrases[data.key][data.id] = data;

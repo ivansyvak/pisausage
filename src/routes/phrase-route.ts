@@ -7,7 +7,12 @@ import { CONFIG } from '../config';
 export const phraseRouter = Router();
 
 phraseRouter.use('/', async (req, res, next) => {
-  let tmpKey = req.headers.authorization;
+  if (req.method == 'OPTIONS') {
+    next();
+    return;
+  }
+
+  let tmpKey = req.body.tmpKey;
 
   if (!tmpKey) {
     next(new AppError(401, 'Unauthorized'));
@@ -23,19 +28,19 @@ phraseRouter.use('/', async (req, res, next) => {
   next();
 });
 
-phraseRouter.get('/', async (req, res, next) => {
+phraseRouter.post('/list', async (req, res, next) => {
   try {
-    let tmpKey = req.headers.authorization;
+    let tmpKey = req.body.tmpKey;
     let user = await userService.getUserByTmpKey(tmpKey);
     let data = await phraseService.readByUserId(user.id);
 
-    res.json(data || {});
+    res.json(data || []);
   } catch (e) {
     next(e);
   }
 });
 
-phraseRouter.post('/', async (req, res, next) => {
+phraseRouter.post('/create', async (req, res, next) => {
   try {
     let p = await phraseService.create(req.body);
     res.json(p);
@@ -44,16 +49,20 @@ phraseRouter.post('/', async (req, res, next) => {
   }
 });
 
-phraseRouter.put('/:id', async (req, res, next) => {
+phraseRouter.post('/update', async (req, res, next) => {
   try {
-    await phraseService.update(req.params.id, req.body);
-    next();
+    await phraseService.update(req.body);
+    res.json({});
   } catch (e) {
     next(e);
   }
 });
 
-phraseRouter.delete('/:id', async (req, res, next) => {
-  let keys = req.params.id.split('.');
-  await phraseService.delete(keys[0], keys[1]);
+phraseRouter.post('/delete', async (req, res, next) => {
+  try {
+    await phraseService.delete(req.body.key, req.body.id);
+    res.json({});
+  } catch (e) {
+    next(e);
+  }
 });

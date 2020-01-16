@@ -48,10 +48,10 @@ class PhraseService extends crud_service_1.CRUDService {
             return res;
         });
     }
-    update(id, data) {
+    update(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!this.phrases[id] || !this.phrases[id][data.id]) {
-                throw new app_error_1.AppError(404, `Key ${id} not found in phrases`);
+            if (!this.phrases[data.key] || !this.phrases[data.key][data.id]) {
+                throw new app_error_1.AppError(404, `Key ${data.key} not found in phrases`);
             }
             this.phrases[data.key][data.id] = data;
         });

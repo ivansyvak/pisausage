@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { logger } from './common/logger';
+import * as path from 'path';
 
 interface Config {
   token: string;
@@ -12,18 +12,20 @@ if (!process.env.NODE_ENV) {
 let configFilePath = "";
 switch (process.env.NODE_ENV) {
   case 'dev':
-    configFilePath = './config/config-dev.json';
+    configFilePath = path.resolve(__dirname, '../config/config-dev.json');
     break;
 
   case 'prod':
-    configFilePath = './config/config-prod.json';
+    configFilePath = path.resolve(__dirname, '../config/config-prod.json');
     break;
 
   default:
     throw `Incorrect NODE_ENV value ${process.env.NODE_ENV} is not supported`;
 }
 
-const baseConfig = JSON.parse(fs.readFileSync('./config/config-base.json').toString());
+const baseConfig = 
+  JSON.parse(fs.readFileSync(path.resolve(__dirname, '../config/config-base.json')).toString());
+  
 const envConfig = JSON.parse(fs.readFileSync(configFilePath).toString());
 
 export const CONFIG: Config = {...baseConfig, ...envConfig};

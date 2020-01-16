@@ -14,7 +14,11 @@ const user_service_1 = require("../services/user-service");
 const phrase_service_1 = require("../services/phrase-service");
 exports.phraseRouter = express_1.Router();
 exports.phraseRouter.use('/', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-    let tmpKey = req.headers.authorization;
+    if (req.method == 'OPTIONS') {
+        next();
+        return;
+    }
+    let tmpKey = req.body.tmpKey;
     if (!tmpKey) {
         next(new app_error_1.AppError(401, 'Unauthorized'));
         return;
@@ -26,18 +30,18 @@ exports.phraseRouter.use('/', (req, res, next) => __awaiter(this, void 0, void 0
     }
     next();
 }));
-exports.phraseRouter.get('/', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+exports.phraseRouter.post('/list', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
-        let tmpKey = req.headers.authorization;
+        let tmpKey = req.body.tmpKey;
         let user = yield user_service_1.userService.getUserByTmpKey(tmpKey);
         let data = yield phrase_service_1.phraseService.readByUserId(user.id);
-        res.json(data || {});
+        res.json(data || []);
     }
     catch (e) {
         next(e);
     }
 }));
-exports.phraseRouter.post('/', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+exports.phraseRouter.post('/create', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         let p = yield phrase_service_1.phraseService.create(req.body);
         res.json(p);
@@ -46,17 +50,22 @@ exports.phraseRouter.post('/', (req, res, next) => __awaiter(this, void 0, void 
         next(e);
     }
 }));
-exports.phraseRouter.put('/:id', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+exports.phraseRouter.post('/update', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
-        yield phrase_service_1.phraseService.update(req.params.id, req.body);
-        next();
+        yield phrase_service_1.phraseService.update(req.body);
+        res.json({});
     }
     catch (e) {
         next(e);
     }
 }));
-exports.phraseRouter.delete('/:id', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-    let keys = req.params.id.split('.');
-    yield phrase_service_1.phraseService.delete(keys[0], keys[1]);
+exports.phraseRouter.post('/delete', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    try {
+        yield phrase_service_1.phraseService.delete(req.body.key, req.body.id);
+        res.json({});
+    }
+    catch (e) {
+        next(e);
+    }
 }));
 //# sourceMappingURL=phrase-route.js.map

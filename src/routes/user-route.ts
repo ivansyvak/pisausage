@@ -53,8 +53,6 @@ userRouter.post('/', async (req, res, next) => {
 
     let user = await userService.create(obj);
 
-    botService.removeTmpKey(tmpKey.key);
-
     res.statusCode = 200;
     res.json(user);
   } catch (e) {

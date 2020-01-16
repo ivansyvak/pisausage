@@ -3,6 +3,7 @@ import { CONFIG } from '../config';
 import { Client, Message, GuildMember, TextChannel, DMChannel, User } from "discord.js";
 import * as uid from 'uniqid';
 import { userService } from './user-service';
+import { phraseService } from './phrase-service';
 
 interface TmpKey {
   key: string;
@@ -34,11 +35,29 @@ export class BotService {
   private onReady() {
   }
 
-  private onMessage(msg: Message) {
+  private async onMessage(msg: Message) {
+    if (msg.author.bot) {
+      return;
+    }
+    
     if (msg.channel instanceof DMChannel) {
       this.handleDMC(msg);
       return;
     }
+
+    let words = msg.content.split(' ');
+    for (let word of words) {
+      let phrases = await phraseService.read(word);
+      if (!phrases) {
+        continue;
+      }
+
+      let phrasesArr = Object.values(phrases);
+      let rand = phrasesArr[Math.floor(Math.random() * phrasesArr.length)];
+      
+      msg.reply(rand.content);
+    }
+
   }
 
   private handleDMC(msg) {
@@ -56,7 +75,7 @@ export class BotService {
     }
 
     let expiringDate = new Date();
-    expiringDate.setHours(expiringDate.getHours() + 24);
+    expiringDate.setHours(expiringDate.getHours() + (24 * 60));
 
     let tmpKey = uid(8);
     this.tmpKeys[tmpKey] = {
@@ -65,7 +84,7 @@ export class BotService {
       payload: msg.author.id
     }
     
-    msg.author.send(`Код активации: ${tmpKey}`);
+    msg.author.send(`${tmpKey}`);
   }
 
   private onGuildMemberAdd(member: GuildMember) {
